@@ -14,6 +14,8 @@ include_class java.io.InputStreamReader
     communicable listener server client
     request
       request/parser
+    response
+      response/parser
     bank
       bank/account
   }.each { |lib| require(lib) }
@@ -28,6 +30,6 @@ end
 
 class Xml
   def self.build(margin = 0)
-    Builder::XmlMarkup.new :indent => 2, :margin => margin
+    Builder::XmlMarkup.new #:indent => 2, :margin => margin
   end
 end

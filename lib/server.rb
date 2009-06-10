@@ -10,7 +10,9 @@ class Server
   
   def dispatch
     request = Request::Parser.new(read)
-    account = Bank.send(request.action, request.params)
+    response = Bank.send(request.action, request.params)
+    write(response.body)
+    request.params.inspect
   end
   
 end

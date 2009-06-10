@@ -31,7 +31,7 @@ class Request
     returning Xml.build do |xml|
       xml.instruct!
       xml.request :action => action  do
-        xml.account(:id => account.id) unless action == :create
+        xml.account(:id => account.account_id) unless action == :create
         xml << action_params
       end
     end

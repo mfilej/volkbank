@@ -15,8 +15,7 @@ puts "Listening on #{port}..."
 begin
   loop do
     server = listener.listen
-    logger.info "*** Connection from #{server.socket.remote_socket_address}"
-    logger.debug(server.dispatch)
+    logger.info "#{server.dispatch} from #{server.socket.remote_socket_address}"
   end
 rescue StandardError => ex
   logger.error ex.to_s

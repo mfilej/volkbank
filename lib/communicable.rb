@@ -6,22 +6,19 @@ module Communicable
   
   def disconnect
     socket.close
+    @reader = nil
+    @writer = nil
     self
   end
   
   def write(data)
-    PrintWriter.new(socket.get_output_stream, true).tap do |writer|
-      writer.print(data)
-    end.close
+    @writer ||= PrintWriter.new(socket.get_output_stream, true)
+    @writer.println(data)
   end
   
   def read
-    reader = BufferedReader.new(InputStreamReader.new(socket.get_input_stream))
-    StringIO.new.tap do |out|
-      until (data = reader.read) < 0
-        out.putc data
-      end
-    end.string
+    @reader ||= BufferedReader.new(InputStreamReader.new(socket.get_input_stream))
+    @reader.read_line
   end
   
 end

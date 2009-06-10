@@ -11,8 +11,9 @@ class Bank::Account
 
     def create(params)
       account = new(params)
-      account[:id] = Bank.next_account_id
+      account[:account_id] = Bank.next_account_id
       Bank::ACCOUNTS << account
+      account
     end
   end
   
@@ -44,16 +45,16 @@ class Bank::Account
     @balance = balance + params[:amount]
   end
   
-  [:id, :first_name, :last_name, :zip_code, :zip_name, :street, :phone, :ssn].each do |method|
+  [:account_id, :first_name, :last_name, :zip_code, :zip_name, :street, :phone, :ssn].each do |method|
     define_method(method) { customer[method].to_s }
   end
   
   def new?
-    !id
+    !account_id
   end
   
   def to_xml
-    attrs = new? ? {} : { :id => id }
+    attrs = new? ? {} : { :id => account_id }
     Xml.build(1).account(attrs) do |xml|
       xml.balance balance, :currency => 'eur'
       xml.owner do
