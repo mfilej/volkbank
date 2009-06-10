@@ -1,0 +1,17 @@
+#!/usr/bin/env jruby
+
+require 'logger'
+require File.join(File.dirname(__FILE__), '..', 'volkbank')
+
+port = ARGV.first.to_i
+listener = Listener.new(port)
+logger = Logger.new(STDOUT)
+logger.level = Logger::DEBUG
+
+puts "Listening on #{port}..."
+
+loop do
+  server = listener.listen
+  logger.info "*** Connection from #{server.socket.remote_socket_address}"
+  logger.debug(server.read)
+end

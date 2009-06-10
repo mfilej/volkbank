@@ -10,6 +10,10 @@ class Client
   
   def connect
     @socket = Socket.new(host, port)
+    if block_given?
+      yield(socket)
+      disconnect
+    end
     self
   end
   
