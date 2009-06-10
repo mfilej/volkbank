@@ -2,34 +2,46 @@ class Bank::Account
   
   class NotEnoughFunds < StandardError; end
   
-  attr_reader :balance, :customer
+  attr_reader :customer
   
   class << self
     def find(id)
       Bank::ACCOUNTS[id]
     end
 
-    def create(account)
-      account.id = Bank.next_account_id
-      accounts << account
+    def create(params)
+      account = new(params)
+      account[:id] = Bank.next_account_id
+      Bank::ACCOUNTS << account
     end
   end
   
   def initialize(customer)
     @customer = customer
-    @balance = 0
   end
   
-  def withdraw(amount)
-    if amount >= balance
+  def []=(key, value)
+    customer[key] = value
+  end
+  
+  def [](key)
+    customer[key]
+  end
+  
+  def balance
+    @balance ||= 0
+  end
+  
+  def withdraw(params)
+    if params[:amount] > balance
       raise NotEnoughFunds.new()
     else
-      balance -= amount
+      @balance = balance - params[:amount]
     end
   end
   
-  def deposit(amount)
-    balance += amount
+  def deposit(params)
+    @balance = balance + params[:amount]
   end
   
   [:id, :first_name, :last_name, :zip_code, :zip_name, :street, :phone, :ssn].each do |method|

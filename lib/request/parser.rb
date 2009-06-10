@@ -37,7 +37,7 @@ class Request::Parser
         :phone => owner.at('./phone').content,
         :ssn => owner.at('./ssn').content
       }
-    end
+    end.update(:id => account_id.to_i)
   end
 
 end
