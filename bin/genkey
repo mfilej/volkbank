@@ -1,0 +1,16 @@
+#!/bin/bash
+
+keytool -genkey -alias kapicaprivate -keystore kapica.private -storetype JKS -keyalg rsa -dname "CN=Kapica" -storepass q1w2e3 -keypass q1w2e3
+keytool -genkey -alias volkprivate   -keystore volk.private   -storetype JKS -keyalg rsa -dname "CN=Volk"   -storepass q1w2e3 -keypass q1w2e3
+keytool -genkey -alias serverprivate -keystore server.private -storetype JKS -keyalg rsa -dname "CN=Banka"  -storepass q1w2e3 -keypass q1w2e3
+
+keytool -export -alias kapicaprivate -keystore kapica.private -file temp.key -storepass q1w2e3
+keytool -import -noprompt -alias kapicapublic -keystore client.public -file temp.key -storepass q1w2e3
+rm temp.key
+keytool -export -alias volkprivate -keystore volk.private -file temp.key -storepass q1w2e3
+keytool -import -noprompt -alias volkpublic -keystore client.public -file temp.key -storepass q1w2e3
+rm temp.key
+
+keytool -export -alias serverprivate -keystore server.private -file temp.key -storepass q1w2e3
+keytool -import -noprompt -alias serverpublic -keystore server.public -file temp.key -storepass q1w2e3
+rm temp.key
