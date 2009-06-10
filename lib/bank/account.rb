@@ -1,34 +1,43 @@
 class Bank::Account
   
+  class NotEnoughFunds < StandardError; end
+  
   attr_reader :balance, :customer
+  
+  class << self
+    def find(id)
+      Bank::ACCOUNTS[id]
+    end
+
+    def create(account)
+      account.id = Bank.next_account_id
+      accounts << account
+    end
+  end
   
   def initialize(customer)
     @customer = customer
     @balance = 0
   end
   
-  [:id, :street, :phone, :ssn].each do |method|
+  def withdraw(amount)
+    if amount >= balance
+      raise NotEnoughFunds.new()
+    else
+      balance -= amount
+    end
+  end
+  
+  def deposit(amount)
+    balance += amount
+  end
+  
+  [:id, :first_name, :last_name, :zip_code, :zip_name, :street, :phone, :ssn].each do |method|
     define_method(method) { customer[method].to_s }
   end
   
   def new?
     !id
-  end
-  
-  def first_name
-    customer[:name].split[0]
-  end
-  
-  def last_name
-    customer[:name].split[1]
-  end
-  
-  def zip_code
-    customer[:region].split[0]
-  end
-  
-  def zip_name
-    customer[:region].split[1]
   end
   
   def to_xml

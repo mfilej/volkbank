@@ -2,6 +2,7 @@ require 'java'
 require 'stringio'
 require 'rubygems'
 require 'builder'
+require 'nokogiri'
 
 include_class java.net.Socket
 include_class java.net.ServerSocket
@@ -12,6 +13,7 @@ include_class java.io.InputStreamReader
 %w{ core_ext
     communicable listener server client
     request
+      request/parser
     bank
       bank/account
   }.each { |lib| require(lib) }

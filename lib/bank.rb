@@ -1,9 +1,9 @@
 class Bank
   
-  attr_reader :accounts
+  Accounts = []
   
-  def initialize
-    @accounts = []
+  def self.next_account_id
+    accounts.size
   end
-  
+    
 end
