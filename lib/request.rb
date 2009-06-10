@@ -1,11 +1,14 @@
 class Request
 
-  attr_reader :action, :account, :params
+  attr_reader :action, :params
 
-  def initialize(action, account, params = {})
+  def initialize(action, params = {})
     @action = action
-    @account = account
     @params = params
+  end
+  
+  def account_id
+    params[:account_id]
   end
   
   def action_params
@@ -13,7 +16,7 @@ class Request
     when :withdrawal, :deposit
       Xml.build(1).amount amount, :currency => currency
     when :create
-      account.to_xml
+      Bank::Account.new(params[:account]).to_xml
     else
       ""
     end
@@ -31,7 +34,7 @@ class Request
     returning Xml.build do |xml|
       xml.instruct!
       xml.request :action => action  do
-        xml.account(:id => account.account_id) unless action == :create
+        xml.account(:id => account_id) unless action == :create
         xml << action_params
       end
     end

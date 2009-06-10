@@ -1,0 +1,46 @@
+#!/usr/bin/env jruby
+
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+require 'volkbank'
+
+host = ARGV.shift
+port = ARGV.shift.to_i
+action = ARGV.shift.intern
+account_params = {}
+
+case action
+when :create
+  account_params[:account] = returning({}) do |attrs|
+    ARGV.each do |param|
+      key, value = param.split(':', 2)
+      attrs[key] = value
+    end
+  end
+else
+  account_params[:account_id] = ARGV.shift.to_i
+  case action
+  when :withdrawal, :deposit
+    account_params[:amount] = ARGV.shift.to_f
+  end
+end
+
+request = Request.new action, account_params
+client = Client.new(host, port).connect
+
+puts "Requesting #{action} for account #{account_params[:account_id] if account_params[:account_id]}..."
+response = Response::Parser.new(client.request(request.to_xml))
+
+puts "Status: #{response.status}"
+
+
+if response.success?
+
+  if action == :create
+    puts "Account created [id: #{response.account_id}]"
+  end
+
+else
+  puts "Error: #{response.error_message}"
+end
+  
+puts "Balance: #{response.balance} #{response.currency}"
