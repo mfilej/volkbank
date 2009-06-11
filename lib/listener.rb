@@ -13,7 +13,7 @@ class Listener
     factory = SSLServerSocketFactory.get_default
     @server_socket = factory.create_server_socket(port)
     @server_socket.need_client_auth = true
-    @server_socket.setEnabledCipherSuites cypher_suites
+    @server_socket.enabled_cipher_suites = cypher_suites
   end
   
   def listen

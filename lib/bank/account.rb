@@ -5,14 +5,14 @@ class Bank::Account
   attr_reader :customer
   
   class << self
-    def find(id)
-      Bank::ACCOUNTS[id]
+    def find(name, id)
+      Bank::ACCOUNTS[name] && Bank::ACCOUNTS[name][id]
     end
 
-    def create(params)
+    def create(name, params)
       account = new(params)
-      account[:account_id] = Bank.next_account_id
-      Bank::ACCOUNTS << account
+      account[:account_id] = Bank::ACCOUNTS[name].size
+      Bank::ACCOUNTS[name] << account
       account
     end
   end

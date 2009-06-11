@@ -1,14 +1,10 @@
 class Bank
   
-  ACCOUNTS = []
+  ACCOUNTS = Hash.new { |h, k| h[k] = []  }
   
   class << self
-    def next_account_id
-      ACCOUNTS.size
-    end
-  
     def deposit(params)
-      if account = Account.find(params[:id])
+      if account = Account.find(params[:name], params[:id])
         account.deposit(params)
         Response.new(account)
       else not_found
@@ -16,7 +12,7 @@ class Bank
     end
   
     def withdrawal(params)
-      if account = Account.find(params[:id])
+      if account = Account.find(params[:name], params[:id])
         account.withdraw(params)
         Response.new(account)
       else not_found
@@ -26,12 +22,12 @@ class Bank
     end
   
     def create(params)
-      account = Account.create(params)
+      account = Account.create(params[:name], params)
       Response.new(account)
     end
   
     def balance(params)
-      if account = Account.find(params[:id])
+      if account = Account.find(params[:name], params[:id])
         Response.new(account)
       else
         not_found
