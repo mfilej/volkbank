@@ -1,9 +1,11 @@
 #!/usr/bin/env jruby
 
-require 'logger'
-
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'volkbank'
+
+def log(message)
+  puts "#{Time.now.strftime("%H:%M:%S")} | #{message}"
+end
 
 port = ARGV.shift.to_i
 options = {
@@ -19,18 +21,18 @@ options = {
 
 listener = Listener.new(port, options)
 
-logger = Logger.new(STDOUT)
-logger.level = Logger::DEBUG
-
-puts "Listening on #{port}..."
+log "Listening on #{port}..."
 
 begin
   loop do
     server = listener.listen
-    request = server.dispatch
-    logger.info "#{request.action} from #{server.client_name}"
+    request, response = server.dispatch
+    log "Incomming request from #{server.client_name} (#{server.socket.remote_socket_address})..."
+    log "- #{server.client_name} #{request}"
+    log "- Status: #{response.status}#{" (#{response.error_message})" if response.error_message}"
   end
 rescue StandardError => ex
-  logger.error ex.to_s
+  log "Exception"
+  puts ex
   puts ex.backtrace.join("\n")
 end

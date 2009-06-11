@@ -16,7 +16,7 @@ class Server
     request = Request::Parser.new(read)
     response = Bank.send(request.action, request.params.update(:name => client_name))
     write(response.body)
-    request
+    [request, response]
   end
   
 end

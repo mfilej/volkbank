@@ -50,9 +50,9 @@ if response.success?
   if action == :create
     puts "Account created [id: #{response.account_id}]"
   end
-
+  puts "Balance: #{response.balance} #{response.currency}"
+  
 else
   puts "Error: #{response.error_message}"
 end
   
-puts "Balance: #{response.balance} #{response.currency}"

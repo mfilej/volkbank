@@ -39,5 +39,9 @@ class Request::Parser
       }
     end.update(:id => account_id.to_i)
   end
-
+  
+  def to_s
+    "##{account_id}: #{action} #{params.inspect}"
+  end
+  
 end
