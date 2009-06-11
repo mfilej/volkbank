@@ -5,8 +5,20 @@ require 'logger'
 $LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require 'volkbank'
 
-port = ARGV.first.to_i
-listener = Listener.new(port)
+port = ARGV.shift.to_i
+options = {
+  :key => {
+    :store => ARGV.shift,
+    :pass => ARGV.shift
+  },
+  :trust => {
+    :store => ARGV.shift,
+    :pass => ARGV.shift
+  }
+}
+
+listener = Listener.new(port, options)
+
 logger = Logger.new(STDOUT)
 logger.level = Logger::DEBUG
 

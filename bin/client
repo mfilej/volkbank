@@ -5,6 +5,18 @@ require 'volkbank'
 
 host = ARGV.shift
 port = ARGV.shift.to_i
+
+options = {
+  :key => {
+    :store => ARGV.shift,
+    :pass => ARGV.shift
+  },
+  :trust => {
+    :store => ARGV.shift,
+    :pass => ARGV.shift
+  }
+}
+
 action = ARGV.shift.intern
 account_params = {}
 
@@ -25,7 +37,7 @@ else
 end
 
 request = Request.new action, account_params
-client = Client.new(host, port).connect
+client = Client.new(host, port, options).connect
 
 puts "Requesting #{action} for account #{account_params[:account_id] if account_params[:account_id]}..."
 response = Response::Parser.new(client.request(request.to_xml))

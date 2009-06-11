@@ -6,11 +6,25 @@ require 'nokogiri'
 
 include_class java.net.Socket
 include_class java.net.ServerSocket
+
 include_class java.io.PrintWriter
 include_class java.io.BufferedReader
 include_class java.io.InputStreamReader
 
+include_class java.security.KeyStore;
+include_class java.security.SecureRandom;
+
+include_class javax.net.ssl.KeyManagerFactory;
+include_class javax.net.ssl.SSLContext;
+include_class javax.net.ssl.SSLSocket;
+include_class javax.net.ssl.SSLSocketFactory;
+include_class javax.net.ssl.SSLServerSocket;
+include_class javax.net.ssl.SSLServerSocketFactory;
+include_class javax.net.ssl.TrustManagerFactory;
+
+
 %w{ core_ext
+    cert_config
     communicable listener server client
     request
       request/parser
